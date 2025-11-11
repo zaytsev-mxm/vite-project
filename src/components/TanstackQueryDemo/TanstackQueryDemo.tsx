@@ -1,5 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 
+/**
+ * @ref https://restful-api.dev/
+ */
 const API_BASE = 'https://api.restful-api.dev';
 
 type ObjectType = {
