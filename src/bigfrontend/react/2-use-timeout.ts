@@ -9,23 +9,22 @@
  * DO NOT reset the timer if only callback changes
  */
 
-import {useEffect, useRef} from "react";
+import { useEffect, useRef } from 'react';
 
 export function useTimeout(callback: () => void, delay: number) {
-    const callbackRef = useRef(callback);
+  const callbackRef = useRef(callback);
 
-    useEffect(() => {
-        callbackRef.current = callback;
-    }, [callback]);
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      callbackRef.current();
+    }, delay);
 
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            callbackRef.current();
-        }, delay);
-
-        return function cleanup() {
-            clearTimeout(timeout);
-        }
-    }, [delay]);
+    return function cleanup() {
+      clearTimeout(timeout);
+    };
+  }, [delay]);
 }

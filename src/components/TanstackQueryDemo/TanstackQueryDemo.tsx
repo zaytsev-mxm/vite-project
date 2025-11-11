@@ -1,60 +1,58 @@
-import {useQuery} from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
 const API_BASE = 'https://api.restful-api.dev';
 
 type ObjectType = {
-    id?: string,
-    name?: string,
-    data?: {
-        Color?: string,
-        Capacity?: string,
-        Generation?: string,
-        Price?: string;
-    }
-}
+  id?: string;
+  name?: string;
+  data?: {
+    Color?: string;
+    Capacity?: string;
+    Generation?: string;
+    Price?: string;
+  };
+};
 
 export const TanstackQueryDemo = () => {
-    const { data, isLoading, error, refetch } = useQuery({
-        queryKey: ['objects'],
-        queryFn: async (context): Promise<ObjectType[]> => {
-            const url = new URL(API_BASE);
-            url.pathname = context.queryKey[0];
-            const response = await fetch(url);
-            const data = await response.json();
-            return data;
-        },
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['objects'],
+    queryFn: async (context): Promise<ObjectType[]> => {
+      const url = new URL(API_BASE);
+      url.pathname = context.queryKey[0];
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+    },
+  });
+
+  console.log({ data });
+
+  const handleClick = () => {
+    refetch().then((newData) => {
+      console.log({ newData });
     });
+  };
 
-    console.log({ data });
+  const renderData = () => {
+    if (data) {
+      return <div>{JSON.stringify(data)}</div>;
+    }
 
-    const handleClick = () => {
-        refetch().then((newData) => {
-            console.log({ newData });
-        });
-    };
+    if (isLoading) {
+      return <div>loading...</div>;
+    }
 
-    const renderData = () => {
-        if (data) {
-            return <div>{JSON.stringify(data)}</div>;
-        }
+    if (error) {
+      return <div>Error: {JSON.stringify(error)}</div>;
+    }
 
-        if (isLoading) {
-            return <div>loading...</div>
-        }
+    return <div>unexpected render</div>;
+  };
 
-        if (error) {
-            return <div>Error: {JSON.stringify(error)}</div>
-        }
-
-        return <div>unexpected render</div>
-    };
-
-    return (
-        <div>
-            <button onClick={handleClick}>refetch</button>
-            <div>
-                {renderData()}
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <button onClick={handleClick}>refetch</button>
+      <div>{renderData()}</div>
+    </div>
+  );
 };

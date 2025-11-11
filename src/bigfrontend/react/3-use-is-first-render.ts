@@ -11,12 +11,12 @@
  * ```
  */
 
-import {useEffect, useRef} from "react";
+import { useEffect, useRef } from 'react';
 
 export function useIsFirstRender(): boolean {
-    const isFirstRef = useRef(true);
-    useEffect(() => {
-        isFirstRef.current = false;
-    }, []);
-    return isFirstRef.current;
+  const isFirstRef = useRef(true);
+  useEffect(() => {
+    isFirstRef.current = false;
+  }, []);
+  return isFirstRef.current;
 }

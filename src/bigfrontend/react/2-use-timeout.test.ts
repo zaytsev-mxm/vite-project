@@ -76,10 +76,9 @@ describe('useTimeout', () => {
     const callback2 = vi.fn();
     const delay = 1000;
 
-    const { rerender } = renderHook(
-      ({ cb }) => useTimeout(cb, delay),
-      { initialProps: { cb: callback1 } }
-    );
+    const { rerender } = renderHook(({ cb }) => useTimeout(cb, delay), {
+      initialProps: { cb: callback1 },
+    });
 
     // Advance time partially
     vi.advanceTimersByTime(500);

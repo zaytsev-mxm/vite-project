@@ -17,38 +17,42 @@
  * The first argument key is for deduplication, we can safely ignore it for now
  */
 
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from 'react';
 
 type Output<T, E> = {
-    data?: T
-    error?: E
+  data?: T;
+  error?: E;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isPromise<T = unknown>(obj?: any): obj is Promise<T> {
-    return !!obj && typeof obj.then === 'function' && typeof obj.catch === 'function';
+  return (
+    !!obj && typeof obj.then === 'function' && typeof obj.catch === 'function'
+  );
 }
 
 export function useSWR<T = unknown, E = unknown>(
-    _key: string,
-    fetcher: () => T | Promise<T>
+  _key: string,
+  fetcher: () => T | Promise<T>,
 ): Output<T, E> {
-    const maybePromiseRef = useRef(fetcher());
-    const [state, setState] = useState<Output<T, E>>({});
+  const maybePromiseRef = useRef(fetcher());
+  const [state, setState] = useState<Output<T, E>>({});
 
-    useEffect(() => {
-        if (isPromise(maybePromiseRef.current)) {
-            maybePromiseRef.current.then((data) => {
-                setState({ data });
-            }).catch((error) => {
-                setState({ error });
-            });
-        }
-    }, []);
-
+  useEffect(() => {
     if (isPromise(maybePromiseRef.current)) {
-        return state;
-    } else {
-        return { data: maybePromiseRef.current };
+      maybePromiseRef.current
+        .then((data) => {
+          setState({ data });
+        })
+        .catch((error) => {
+          setState({ error });
+        });
     }
+  }, []);
+
+  if (isPromise(maybePromiseRef.current)) {
+    return state;
+  } else {
+    return { data: maybePromiseRef.current };
+  }
 }
