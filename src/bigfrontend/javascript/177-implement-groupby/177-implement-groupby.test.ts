@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ObjectGroupBy } from './177-implement-groupby';
+import { ObjectGroupBy } from './177-implement-groupby.ts';
 
 describe('ObjectGroupBy', () => {
   it('[] -> returns empty null-prototype object', () => {
