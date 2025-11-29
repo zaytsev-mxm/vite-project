@@ -6,11 +6,10 @@ function join(a: any, b: any, c: any) {
   return `${a}_${b}_${c}`;
 }
 
-// @ts-expect-error ...
 const _ = curry.placeholder;
 
 describe('join with placeholder', () => {
   test('it works with placeholder', () => {
-    expect(curry(join)(_, _, 3, 4)(1, _)(2, 5)).toBe('3_4_1');
+    expect(curry(join)(_, _, 3, 4)(1, _)(2, 5)).toBe('1_2_3');
   });
 });

@@ -1,33 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // This is a JavaScript coding problem from BFE.dev
 
-type Curry = (fn: (...args: any[]) => any) => (...args: any[]) => any;
+interface Curry {
+  (fn: (...args: any[]) => any): (...args: any[]) => any;
+  placeholder: symbol;
+}
 
-const curry: Curry = (fn) => {
-  const getFilteredArgs = (...args: any[]) => {
-    return args.filter((arg) => {
-      // @ts-expect-error ...
-      return arg !== curry.placeholder;
-    });
-  };
-
+export const curry: Curry = (fn) => {
   const arity = fn.length;
+  const storedArgs: Parameters<typeof fn> = new Array(arity);
+  const storedArgsPositions: boolean[] = new Array(arity).fill(false);
+  let filledArgs = 0;
+  return function curriedFunc(this: unknown, ...args) {
+    args.forEach((arg, pos) => {
+      if (
+        pos <= arity - 1 &&
+        arg !== curry.placeholder &&
+        !storedArgsPositions[pos]
+      ) {
+        storedArgsPositions[pos] = true;
+        storedArgs[pos] = arg;
+        filledArgs++;
+      }
+    });
 
-  const curried = (..._args: any[]): any => {
-    const args = getFilteredArgs(..._args);
-    if (args.length >= arity) {
-      return fn(...args.slice(0, arity));
+    if (filledArgs === arity) {
+      return fn.apply(this, storedArgs);
+    } else {
+      return curriedFunc;
     }
-    return (..._next: any[]) => {
-      const next = getFilteredArgs(..._next);
-      return curried(...args, ...next);
-    };
   };
-
-  return curried;
 };
 
-// @ts-expect-error ...-
 curry.placeholder = Symbol('curry placeholder');
-
-export { curry };
