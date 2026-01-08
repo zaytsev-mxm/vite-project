@@ -1,3 +1,0 @@
-const quickSearch = () => {};
-
-export { quickSearch };
