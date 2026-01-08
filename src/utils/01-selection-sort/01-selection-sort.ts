@@ -1,21 +1,38 @@
 // 0. Selection sort
-const selectionSort = (nums: number[]) => {
-  const result: number[] = [];
+const selectionSort = (numsGiven: number[]) => {
+  const nums = numsGiven.slice();
 
-  while (nums.length) {
-    let min = Infinity;
-    let minIdx = -1;
-    for (let i = 0; i < nums.length; i++) {
-      if (nums[i] < min) {
-        min = nums[i];
-        minIdx = i;
+  for (let i = 0; i < nums.length; i++) {
+    let minIdx = i;
+    for (let j = i + 1; j < nums.length; j++) {
+      if (nums[j] < nums[minIdx]) {
+        minIdx = j;
       }
     }
-    result.push(min);
-    nums.splice(minIdx, 1);
+    [nums[i], nums[minIdx]] = [nums[minIdx], nums[i]];
   }
 
-  return result;
+  return nums;
 };
 
-console.log(selectionSort([3, 1, 2]));
+function selectionSortTypeSafe<T>(
+  arrGiven: T[],
+  matcher: (itemA: T, itemB: T) => 0 | 1 | -1,
+) {
+  const arr = arrGiven.slice();
+
+  for (let i = 0; i < arr.length; i++) {
+    let minIdx = i;
+    for (let j = i + 1; j < arr.length; j++) {
+      const match = matcher(arr[j], arr[minIdx]);
+      if (match < 0) {
+        minIdx = j;
+      }
+    }
+    [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+  }
+
+  return arr;
+}
+
+export { selectionSort, selectionSortTypeSafe };
