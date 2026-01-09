@@ -27,10 +27,10 @@ function partition(arr: number[], start: number, end: number) {
   // traverse arr[start..end] and move all smaller
   // elements to the left side. Elements from start to
   // lastSmallerIndex are smaller after every iteration
-  for (let j = start; j <= end - 1; j++) {
-    if (arr[j] < pivotValue) {
+  for (let i = start; i <= end - 1; i++) {
+    if (arr[i] < pivotValue) {
       lastSmallerIndex++;
-      swap(arr, lastSmallerIndex, j);
+      swap(arr, lastSmallerIndex, i);
     }
   }
 
