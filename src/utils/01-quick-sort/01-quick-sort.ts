@@ -22,22 +22,22 @@ function partition(arr: number[], low: number, high: number) {
 
   // index of a smaller element and indicates
   // the right position of the pivot found so far
-  let i = low - 1;
+  let smallerBoundary = low - 1;
 
   // traverse arr[low..high] and move all smaller
   // elements to the left side. Elements from low to
   // i are smaller after every iteration
   for (let j = low; j <= high - 1; j++) {
     if (arr[j] < pivot) {
-      i++;
-      swap(arr, i, j);
+      smallerBoundary++;
+      swap(arr, smallerBoundary, j);
     }
   }
 
   // move pivot after smaller elements and
   // return its position
-  swap(arr, i + 1, high);
-  return i + 1;
+  swap(arr, smallerBoundary + 1, high);
+  return smallerBoundary + 1;
 }
 
 // swap function
