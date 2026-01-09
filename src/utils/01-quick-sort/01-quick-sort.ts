@@ -16,18 +16,18 @@ const quickSortNaive = (nums: number[]): number[] => {
 };
 
 // partition function
-function partition(arr: number[], low: number, high: number) {
+function partition(arr: number[], start: number, end: number) {
   // choose the pivot
-  const pivot = arr[high];
+  const pivot = arr[end];
 
   // index of a smaller element and indicates
   // the right position of the pivot found so far
-  let smallerBoundary = low - 1;
+  let smallerBoundary = start - 1;
 
   // traverse arr[low..high] and move all smaller
   // elements to the left side. Elements from low to
   // i are smaller after every iteration
-  for (let j = low; j <= high - 1; j++) {
+  for (let j = start; j <= end - 1; j++) {
     if (arr[j] < pivot) {
       smallerBoundary++;
       swap(arr, smallerBoundary, j);
@@ -36,7 +36,7 @@ function partition(arr: number[], low: number, high: number) {
 
   // move pivot after smaller elements and
   // return its position
-  swap(arr, smallerBoundary + 1, high);
+  swap(arr, smallerBoundary + 1, end);
   return smallerBoundary + 1;
 }
 
@@ -48,15 +48,15 @@ function swap(arr: number[], i: number, j: number) {
 }
 
 // the QuickSort function implementation
-function quickSortHelper(arr: number[], low: number, high: number) {
-  if (low < high) {
+function quickSortHelper(arr: number[], start: number, end: number) {
+  if (start < end) {
     // pi is the partition return index of a pivot
-    const pi = partition(arr, low, high);
+    const pi = partition(arr, start, end);
 
     // recursion calls for smaller elements
     // and greater or equals elements
-    quickSortHelper(arr, low, pi - 1);
-    quickSortHelper(arr, pi + 1, high);
+    quickSortHelper(arr, start, pi - 1);
+    quickSortHelper(arr, pi + 1, end);
   }
   return arr;
 }
