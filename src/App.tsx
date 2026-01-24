@@ -1,11 +1,18 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary';
 import { Timer } from './assignments/timer/timer.tsx';
+import { UserSearch } from './assignments/users-search/user-search.tsx';
 
 function App() {
   return (
     <ErrorBoundary>
-      <Timer />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Timer />} />
+          <Route path="/users-search" element={<UserSearch />} />
+        </Routes>
+      </BrowserRouter>
     </ErrorBoundary>
   );
 }
