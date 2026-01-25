@@ -1,34 +1,26 @@
 import { SearchBar } from './components/search-bar';
 import { Results } from './components/results';
-import { useCallback, useState } from 'react';
-import { useAjax } from './hooks';
+import { useState } from 'react';
+import { useAjax, useDebouncedValue } from './hooks';
 import type { SearchResponse } from './types';
-import { debounce, fetcher } from './utils';
+import { fetcher } from './utils';
 
 const BASE_URL = 'https://api.github.com/search/users?q=';
 
 export const UserSearch = () => {
   const [query, setQuery] = useState('');
-  const [searchUrl, setSearchUrl] = useState('');
+  const debouncedQuery = useDebouncedValue(query, 1000);
 
-  const debouncedSearchUrlUpdate = useCallback(
-    debounce((value: unknown) => {
-      setSearchUrl(() => {
-        return `${BASE_URL}${value}`;
-      });
-    }, 1000),
-    [],
-  );
+  const searchUrl = debouncedQuery ? `${BASE_URL}${debouncedQuery}` : '';
 
   const { data, error, isLoading } = useAjax<SearchResponse>(
     searchUrl,
     fetcher,
-    { skipFirstMount: true },
+    { enabled: !!searchUrl },
   );
 
   const handleSearchInput = (val: string) => {
     setQuery(val);
-    debouncedSearchUrlUpdate(val);
   };
 
   return (

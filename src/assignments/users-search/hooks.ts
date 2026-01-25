@@ -1,52 +1,73 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+
+export function useDebouncedValue<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 
 type Options = {
-  skipFirstMount?: boolean;
+  enabled?: boolean;
 };
 
-const cache = new Map<string, Promise<unknown>>();
+type FetcherFn<T> = (url: string) => Promise<T>;
+
+// Simple cache for demo purposes - in production, use TanStack Query or SWR
+const cache = new Map<string, unknown>();
 
 export function useAjax<T>(
   url: string,
-  fetcher: (url: string) => Promise<T>,
+  fetcher: FetcherFn<T>,
   options?: Options,
 ) {
-  const mountedRef = useRef(false);
   const [result, setResult] = useState<{
-    isLoading?: boolean;
+    isLoading: boolean;
     error?: Error;
     data?: T;
   }>({ isLoading: false });
 
+  const enabled = options?.enabled ?? true;
+
   useEffect(() => {
-    console.log(mountedRef.current);
-    if (options?.skipFirstMount && !mountedRef.current) {
-      mountedRef.current = true;
+    if (!enabled) {
       return;
     }
-    mountedRef.current = true;
-    setResult({ isLoading: true });
 
-    if (!cache.has(url)) {
-      cache.set(url, fetcher(url));
+    // Return cached data immediately if available
+    if (cache.has(url)) {
+      setResult({ data: cache.get(url) as T, isLoading: false });
+      return;
     }
 
-    const promise = cache.get(url) as Promise<T>;
+    let cancelled = false;
 
-    promise
+    setResult((prev) => ({ ...prev, isLoading: true, error: undefined }));
+
+    fetcher(url)
       .then((data) => {
-        console.log({ data });
-        setResult({ data, isLoading: false });
+        if (!cancelled) {
+          cache.set(url, data);
+          setResult({ data, isLoading: false });
+        }
       })
       .catch((error) => {
-        console.log({ error });
-        setResult({ error, isLoading: false });
+        if (!cancelled) {
+          setResult({ error, isLoading: false });
+        }
       });
 
-    console.log({ promise });
-
-    return () => {};
-  }, [fetcher, options?.skipFirstMount, url]);
+    return () => {
+      cancelled = true;
+    };
+  }, [enabled, fetcher, url]);
 
   return result;
 }
