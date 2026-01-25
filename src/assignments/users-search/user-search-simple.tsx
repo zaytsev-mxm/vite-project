@@ -43,6 +43,7 @@ export const UserSearchSimple = () => {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search GitHub users..."
+        className="border-2 border-blue-300 rounded-lg p-2 mb-6 focus-visible:border-amber-200"
       />
 
       {isLoading && <div>Loading...</div>}
