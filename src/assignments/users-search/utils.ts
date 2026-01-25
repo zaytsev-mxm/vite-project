@@ -1,6 +1,12 @@
 export function fetcher<T>(url: string): Promise<T> {
-  return fetch(url).then((response) => {
-    return response.json();
+  return new Promise((resolve, reject) => {
+    fetch(url)
+      .then((response) => {
+        setTimeout(() => {
+          resolve(response.json());
+        }, 100);
+      })
+      .catch(reject);
   });
 }
 

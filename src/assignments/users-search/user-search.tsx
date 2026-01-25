@@ -1,6 +1,6 @@
 import { SearchBar } from './components/search-bar';
 import { Results } from './components/results';
-import { useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { useAjax } from './hooks';
 import type { SearchResponse } from './types';
 import { debounce, fetcher } from './utils';
@@ -11,21 +11,24 @@ export const UserSearch = () => {
   const [query, setQuery] = useState('');
   const [searchUrl, setSearchUrl] = useState('');
 
-  const debouncedSearchUrlUpdate = debounce(() => {
-    setSearchUrl(`${BASE_URL}${query}`);
-  }, 1000);
-
-  useEffect(() => {
-    debouncedSearchUrlUpdate();
-  }, [debouncedSearchUrlUpdate]);
+  const debouncedSearchUrlUpdate = useCallback(
+    debounce((value: unknown) => {
+      setSearchUrl(() => {
+        return `${BASE_URL}${value}`;
+      });
+    }, 1000),
+    [],
+  );
 
   const { data, error, isLoading } = useAjax<SearchResponse>(
     searchUrl,
     fetcher,
+    { skipFirstMount: true },
   );
 
   const handleSearchInput = (val: string) => {
     setQuery(val);
+    debouncedSearchUrlUpdate(val);
   };
 
   return (
