@@ -4,7 +4,8 @@ import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary';
 import { Timer } from './assignments/timer/timer.tsx';
 // import { UserSearch } from './assignments/users-search/user-search.tsx';
 // import { UserSearchSimple } from './assignments/users-search/user-search-simple';
-import { UsersSearchRepeat } from './assignments/users-search-repeat/users-search-repeat';
+// import { UsersSearchRepeat } from './assignments/users-search-repeat/users-search-repeat';
+import { UsersSearchWithUse } from './assignments/users-search-with-use/users-search-with-use';
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Timer />} />
-          <Route path="/users-search" element={<UsersSearchRepeat />} />
+          <Route path="/users-search" element={<UsersSearchWithUse />} />
         </Routes>
       </BrowserRouter>
     </ErrorBoundary>
