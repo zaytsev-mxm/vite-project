@@ -1,32 +1,37 @@
-function groupTotals(strArr: string[]) {
-  // An object to store the sums for each unique letter:
-  const sums: Record<string, number> = {};
+export function clone<T>(input: T): T {
+  const getType = (entity: unknown) => {
+    return Object.prototype.toString.call(entity).slice(8, -1);
+  };
 
-  // Loop over the input array, and calculate the sums:
-  strArr.forEach((str) => {
-    const parsed = str.split(':');
-    const char = parsed[0];
-    const val = Number(parsed[1]);
-    const currentVal = sums[char] || 0;
-    const newVal = currentVal + val;
-    sums[char] = newVal;
-  });
+  const isArray = (maybeArray: unknown): maybeArray is Array<unknown> => {
+    return getType(maybeArray) === 'Array';
+  };
+  const isObject = (
+    maybeObject: unknown,
+  ): maybeObject is Record<string, unknown> => {
+    return getType(maybeObject) === 'Object';
+  };
 
-  // Prepare an array to store the result:
-  const resArr: string[] = [];
-
-  // Loop over the sums, and put the values to the resulting array:
-  for (const char in sums) {
-    const val = sums[char];
-    if (val !== 0) {
-      resArr.push(`${char}:${val}`);
-    }
+  if (isArray(input)) {
+    return input.map(clone) as T;
   }
 
-  // Convert the resulting array to a string:
-  const resStr = resArr.join(',');
+  if (isObject(input)) {
+    return Object.entries(input).reduce((acc, [key, val]) => {
+      Reflect.set(acc, key, clone(val));
+      return acc;
+    }, {}) as T;
+  }
 
-  return resStr;
+  return input;
 }
 
-console.log(groupTotals(['X:-1', 'Y:1', 'X:-4', 'B:3', 'X:5']));
+const res1 = clone(1);
+const res2 = clone('a');
+const res3 = clone((numA: number, numB: number) => numA + numB);
+const res4 = clone([1, 2, 3]);
+const res5 = clone([1, 'a', () => 42]);
+const res6 = clone({ a: 1 });
+const res7 = clone({ a: 1, b: [1, { c: [() => 24] }] });
+
+console.log(res1, res2, res3, res4, res5, res6, res7);
