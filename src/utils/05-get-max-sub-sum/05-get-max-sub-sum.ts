@@ -1,4 +1,5 @@
 export const getMaxSubSum = (nums: number[]): number => {
+  if (!nums.length) return 0;
   let maxSum: number = -Infinity;
 
   for (let i = 0; i < nums.length; i++) {
@@ -13,6 +14,7 @@ export const getMaxSubSum = (nums: number[]): number => {
 };
 
 export const getMaxSubSumOn = (nums: number[]): number => {
+  if (!nums.length) return 0;
   let maxSum = -Infinity;
   let partialSum = 0;
 
