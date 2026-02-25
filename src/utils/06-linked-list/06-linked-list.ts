@@ -93,7 +93,7 @@ export class LinkedList<T> {
     const result: T[] = [];
     let current = this.#head;
     while (current) {
-      if (current.value !== null) result.push(current.value);
+      result.push(current.value);
       current = current.next;
     }
     return result;
