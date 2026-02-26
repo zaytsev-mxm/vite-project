@@ -67,6 +67,14 @@ export class LinkedList<T> {
     return false;
   }
 
+  insertAfter(node: LinkedListNode<T>, value: T): this {
+    const newNode = new LinkedListNode(value, node.next);
+    _next.set(node, newNode);
+    if (node === this.#tail) this.#tail = newNode;
+    this.#length++;
+    return this;
+  }
+
   find(value: T): LinkedListNode<T> | null {
     let current = this.#head;
     while (current) {

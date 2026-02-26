@@ -107,6 +107,36 @@ describe('LinkedList', () => {
     });
   });
 
+  describe('insertAfter', () => {
+    it('inserts after a middle node', () => {
+      list.append(1).append(2).append(3);
+      const node = list.find(2)!;
+      list.insertAfter(node, 99);
+      expect(list.toArray()).toEqual([1, 2, 99, 3]);
+      expect(list.length).toBe(4);
+    });
+
+    it('inserts after the head', () => {
+      list.append(1).append(2);
+      list.insertAfter(list.head!, 99);
+      expect(list.toArray()).toEqual([1, 99, 2]);
+      expect(list.head?.value).toBe(1);
+    });
+
+    it('inserts after the tail and updates tail', () => {
+      list.append(1).append(2);
+      list.insertAfter(list.tail!, 99);
+      expect(list.toArray()).toEqual([1, 2, 99]);
+      expect(list.tail?.value).toBe(99);
+      expect(list.length).toBe(3);
+    });
+
+    it('returns `this` for chaining', () => {
+      list.append(1);
+      expect(list.insertAfter(list.head!, 2)).toBe(list);
+    });
+  });
+
   describe('find', () => {
     it('returns null on an empty list', () => {
       expect(list.find(1)).toBeNull();
