@@ -143,18 +143,3 @@ export class LinkedList<T> {
   }
 }
 
-// Usage
-const numsLinkedList = new LinkedList<number>();
-numsLinkedList.append(1).append(2).append(3);
-
-console.log(numsLinkedList.toString()); // "1,2,3"
-console.log(numsLinkedList.toArray()); // [1, 2, 3]
-console.log(numsLinkedList.length); // 3
-
-numsLinkedList.prepend(0);
-console.log(numsLinkedList.toString()); // "0,1,2,3"
-
-numsLinkedList.remove(2);
-console.log(numsLinkedList.toString()); // "0,1,3"
-
-console.log(JSON.stringify(numsLinkedList)); // [0, 1, 3]
