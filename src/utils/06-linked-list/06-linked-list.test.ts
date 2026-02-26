@@ -225,6 +225,32 @@ describe('LinkedList', () => {
     });
   });
 
+  describe('Symbol.iterator', () => {
+    it('yields nothing for an empty list', () => {
+      expect([...list]).toEqual([]);
+    });
+
+    it('yields values in order with for...of', () => {
+      list.append(1).append(2).append(3);
+      const result: number[] = [];
+      for (const val of list) result.push(val);
+      expect(result).toEqual([1, 2, 3]);
+    });
+
+    it('works with spread operator', () => {
+      list.append(1).append(2).append(3);
+      expect([...list]).toEqual([1, 2, 3]);
+    });
+
+    it('works with destructuring', () => {
+      list.append(10).append(20).append(30);
+      const [a, b, c] = list;
+      expect(a).toBe(10);
+      expect(b).toBe(20);
+      expect(c).toBe(30);
+    });
+  });
+
   describe('toArray', () => {
     it('returns an empty array for an empty list', () => {
       expect(list.toArray()).toEqual([]);

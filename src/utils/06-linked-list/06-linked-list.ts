@@ -133,6 +133,14 @@ export class LinkedList<T> {
   toJSON(): T[] {
     return this.toArray();
   }
+
+  *[Symbol.iterator](): Iterator<T> {
+    let current = this.#head;
+    while (current) {
+      yield current.value;
+      current = current.next;
+    }
+  }
 }
 
 // Usage
