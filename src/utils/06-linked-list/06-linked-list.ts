@@ -67,6 +67,14 @@ export class LinkedList<T> {
     return false;
   }
 
+  removeAfter(node: LinkedListNode<T>): boolean {
+    if (node.next === null) return false;
+    if (node.next === this.#tail) this.#tail = node;
+    _next.set(node, node.next.next);
+    this.#length--;
+    return true;
+  }
+
   insertAfter(node: LinkedListNode<T>, value: T): this {
     const newNode = new LinkedListNode(value, node.next);
     _next.set(node, newNode);

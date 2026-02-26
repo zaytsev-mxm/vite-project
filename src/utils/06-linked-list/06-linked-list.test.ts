@@ -107,6 +107,35 @@ describe('LinkedList', () => {
     });
   });
 
+  describe('removeAfter', () => {
+    it('returns false when node has no successor', () => {
+      list.append(1);
+      expect(list.removeAfter(list.tail!)).toBe(false);
+      expect(list.length).toBe(1);
+    });
+
+    it('removes the node after a middle node', () => {
+      list.append(1).append(2).append(3);
+      list.removeAfter(list.head!);
+      expect(list.toArray()).toEqual([1, 3]);
+      expect(list.length).toBe(2);
+    });
+
+    it('removes the tail and updates tail', () => {
+      list.append(1).append(2).append(3);
+      const second = list.find(2)!;
+      list.removeAfter(second);
+      expect(list.toArray()).toEqual([1, 2]);
+      expect(list.tail?.value).toBe(2);
+      expect(list.length).toBe(2);
+    });
+
+    it('returns true on successful removal', () => {
+      list.append(1).append(2);
+      expect(list.removeAfter(list.head!)).toBe(true);
+    });
+  });
+
   describe('insertAfter', () => {
     it('inserts after a middle node', () => {
       list.append(1).append(2).append(3);
