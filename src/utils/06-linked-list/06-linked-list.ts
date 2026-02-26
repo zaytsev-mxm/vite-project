@@ -1,10 +1,17 @@
-const _next = new WeakMap<LinkedListNode<any>, LinkedListNode<any> | null>();
+const _next = new WeakMap<
+  LinkedListNode<unknown>,
+  LinkedListNode<unknown> | null
+>();
 
 class LinkedListNode<T> {
   #value: T;
 
-  get value(): T { return this.#value; }
-  get next(): LinkedListNode<T> | null { return _next.get(this) ?? null; }
+  get value(): T {
+    return this.#value;
+  }
+  get next(): LinkedListNode<T> | null {
+    return (_next.get(this) as LinkedListNode<T>) ?? null;
+  }
 
   constructor(value: T, next: LinkedListNode<T> | null) {
     this.#value = value;
@@ -17,9 +24,15 @@ export class LinkedList<T> {
   #tail: LinkedListNode<T> | null = null;
   #length: number = 0;
 
-  get head(): LinkedListNode<T> | null { return this.#head; }
-  get tail(): LinkedListNode<T> | null { return this.#tail; }
-  get length(): number { return this.#length; }
+  get head(): LinkedListNode<T> | null {
+    return this.#head;
+  }
+  get tail(): LinkedListNode<T> | null {
+    return this.#tail;
+  }
+  get length(): number {
+    return this.#length;
+  }
 
   append(value: T): this {
     this.#length++;
