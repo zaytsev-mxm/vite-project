@@ -1,10 +1,14 @@
+const _next = new WeakMap<LinkedListNode<any>, LinkedListNode<any> | null>();
+
 class LinkedListNode<T> {
-  value: T;
-  next: LinkedListNode<T> | null = null;
+  #value: T;
+
+  get value(): T { return this.#value; }
+  get next(): LinkedListNode<T> | null { return _next.get(this) ?? null; }
 
   constructor(value: T, next: LinkedListNode<T> | null) {
-    this.value = value;
-    this.next = next;
+    this.#value = value;
+    _next.set(this, next);
   }
 }
 
@@ -13,15 +17,9 @@ export class LinkedList<T> {
   #tail: LinkedListNode<T> | null = null;
   #length: number = 0;
 
-  get head(): LinkedListNode<T> | null {
-    return this.#head;
-  }
-  get tail(): LinkedListNode<T> | null {
-    return this.#tail;
-  }
-  get length(): number {
-    return this.#length;
-  }
+  get head(): LinkedListNode<T> | null { return this.#head; }
+  get tail(): LinkedListNode<T> | null { return this.#tail; }
+  get length(): number { return this.#length; }
 
   append(value: T): this {
     this.#length++;
@@ -31,7 +29,7 @@ export class LinkedList<T> {
       this.#head = node;
       this.#tail = node;
     } else {
-      this.#tail.next = node;
+      _next.set(this.#tail, node);
       this.#tail = node;
     }
     return this;
@@ -59,7 +57,7 @@ export class LinkedList<T> {
     while (current.next) {
       if (current.next.value === value) {
         if (current.next === this.#tail) this.#tail = current;
-        current.next = current.next.next;
+        _next.set(current, current.next.next);
         this.#length--;
         return true;
       }
@@ -107,3 +105,19 @@ export class LinkedList<T> {
     return this.toArray();
   }
 }
+
+// Usage
+const numsLinkedList = new LinkedList<number>();
+numsLinkedList.append(1).append(2).append(3);
+
+console.log(numsLinkedList.toString()); // "1,2,3"
+console.log(numsLinkedList.toArray()); // [1, 2, 3]
+console.log(numsLinkedList.length); // 3
+
+numsLinkedList.prepend(0);
+console.log(numsLinkedList.toString()); // "0,1,2,3"
+
+numsLinkedList.remove(2);
+console.log(numsLinkedList.toString()); // "0,1,3"
+
+console.log(JSON.stringify(numsLinkedList)); // [0, 1, 3]

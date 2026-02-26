@@ -203,6 +203,18 @@ describe('LinkedList', () => {
       expect(() => { obj['tail'] = null; }).toThrow(TypeError);
       expect(() => { obj['length'] = 999; }).toThrow(TypeError);
     });
+
+    it('throws when attempting to write node.next', () => {
+      list.append(1).append(2);
+      const node = list.head as unknown as Record<string, unknown>;
+      expect(() => { node['next'] = null; }).toThrow(TypeError);
+    });
+
+    it('throws when attempting to write node.value', () => {
+      list.append(1);
+      const node = list.head as unknown as Record<string, unknown>;
+      expect(() => { node['value'] = 99; }).toThrow(TypeError);
+    });
   });
 
   describe('mixed operations', () => {
