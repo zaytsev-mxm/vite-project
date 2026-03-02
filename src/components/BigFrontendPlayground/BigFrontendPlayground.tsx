@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { useTimeout } from '../../bigfrontend/react/2-use-timeout.ts';
-import { useIsFirstRender } from '../../bigfrontend/react/3-use-is-first-render.ts';
+import { useTimeout } from '../../bigfrontend/react/2-use-timeout/2-use-timeout.ts';
+import { useIsFirstRender } from '../../bigfrontend/react/3-use-is-first-render/3-use-is-first-render.ts';
 
 const SEC = 1_000;
 
